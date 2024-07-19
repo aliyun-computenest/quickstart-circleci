@@ -196,7 +196,7 @@ Resources:
             while [ $attempt -lt $MAX_RETRIES ]; do
               if git clone "$REPO_URL" "$CLONE_DIR"; then
                 echo "仓库克隆成功！"
-                cd ./quickstart-zabbix/docker
+                cd ./quickstart-zabbix/docker_compose
                 docker compose -f ./docker-compose_v3_centos_mysql_latest.yaml up -d
                 ARGUS_VERSION=3.5.7 /bin/bash -c "$(curl -sS https://cms-agent-${RegionId}.oss-${RegionId}-internal.aliyuncs.com/Argus/agent_install_ecs-1.7.sh)" >> /root/install_cms_agent.log 2>&1
                 exit 0
@@ -219,13 +219,22 @@ Outputs:
       zh-cn: 访问页面。
     Value:
       Fn::Sub:
-        - 'http://${ServerAddress}:8080'
+        - 'http://${ServerAddress}:80'
         - ServerAddress:
             Fn::Select:
             - 0
             - Fn::GetAtt:
               - InstanceGroup
               - PublicIps
+  初始用户名:
+    Description:
+      zh-cn: 初始用户名
+    Value: Admin
+  初始密码:
+    NoEcho: true
+    Description:
+      zh-cn: 初始密码
+    Value: zabbix
 Metadata:
   ALIYUN::ROS::Interface:
     ParameterGroups:

@@ -169,13 +169,3 @@ secrets:
     file: ${ENV_VARS_DIRECTORY}/.MYSQL_ROOT_USER
   MYSQL_ROOT_PASSWORD:
     file: ${ENV_VARS_DIRECTORY}/.MYSQL_ROOT_PASSWORD
-#  client-key.pem:
-#    file: ${ENV_VARS_DIRECTORY}/.ZBX_DB_KEY_FILE
-#  client-cert.pem:
-#    file: ${ENV_VARS_DIRECTORY}/.ZBX_DB_CERT_FILE
-#  root-ca.pem:
-#    file: ${ENV_VARS_DIRECTORY}/.ZBX_DB_CA_FILE
-#  server-cert.pem:
-#    file: ${ENV_VARS_DIRECTORY}/.DB_CERT_FILE
-#  server-key.pem:
-#    file: ${ENV_VARS_DIRECTORY}/.DB_KEY_FILE
