@@ -115,7 +115,7 @@ Resources:
       VpcId:
         Ref: VpcId
       SecurityGroupIngress:
-        - PortRange: 8080/8080
+        - PortRange: 80/80
           Priority: 1
           SourceCidrIp: 0.0.0.0/0
           IpProtocol: tcp
