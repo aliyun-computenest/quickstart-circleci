@@ -115,12 +115,7 @@ Resources:
       VpcId:
         Ref: VpcId
       SecurityGroupIngress:
-        - PortRange: 3000/3000
-          Priority: 1
-          SourceCidrIp: 0.0.0.0/0
-          IpProtocol: tcp
-          NicType: internet
-        - PortRange: 9090/9090
+        - PortRange: 8080/8080
           Priority: 1
           SourceCidrIp: 0.0.0.0/0
           IpProtocol: tcp
@@ -190,13 +185,31 @@ Resources:
             yum install -y git docker-ce jq
             systemctl enable docker
             systemctl start docker
-      
+
+            REPO_URL="https://github.com/aliyun-computenest/quickstart-zabbix"
+            CLONE_DIR="/root/quickstart-zabbix"
+            MAX_RETRIES=5  
+            BASE_SLEEP_INTERVAL=5  
             cd /root/
-            git clone https://github.com/aliyun-computenest/quickstart-zabbix
-            cd quickstart-zabbix
-            docker compose up -d
-            
-            ARGUS_VERSION=3.5.7 /bin/bash -c "$(curl -sS https://cms-agent-${RegionId}.oss-${RegionId}-internal.aliyuncs.com/Argus/agent_install_ecs-1.7.sh)" >> /root/install_cms_agent.log 2>&1
+            attempt=0
+            sleep_interval=$BASE_SLEEP_INTERVAL
+            while [ $attempt -lt $MAX_RETRIES ]; do
+              if git clone "$REPO_URL" "$CLONE_DIR"; then
+                echo "仓库克隆成功！"
+                cd quickstart-zabbix
+                docker compose up -d
+                ARGUS_VERSION=3.5.7 /bin/bash -c "$(curl -sS https://cms-agent-${RegionId}.oss-${RegionId}-internal.aliyuncs.com/Argus/agent_install_ecs-1.7.sh)" >> /root/install_cms_agent.log 2>&1
+                exit 0
+              else
+                echo "失败的尝试 #$((attempt+1))，将在 $sleep_interval 秒后重试..."
+                attempt=$((attempt+1))
+                sleep $sleep_interval
+                sleep_interval=$((sleep_interval * 2)) 
+              fi
+            done
+            echo "多次尝试后仍然无法克隆仓库，请检查网络连接或仓库地址是否正确。"
+            exit 1
+
           - RegionId:
               Ref: ALIYUN::Region
 Outputs:
@@ -206,7 +219,7 @@ Outputs:
       zh-cn: 访问页面。
     Value:
       Fn::Sub:
-        - 'http://${ServerAddress}:9090'
+        - 'http://${ServerAddress}:8080'
         - ServerAddress:
             Fn::Select:
             - 0
