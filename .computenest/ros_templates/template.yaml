@@ -188,8 +188,8 @@ Resources:
 
             REPO_URL="https://github.com/aliyun-computenest/quickstart-zabbix"
             CLONE_DIR="/root/quickstart-zabbix"
-            MAX_RETRIES=5  
-            BASE_SLEEP_INTERVAL=5  
+            MAX_RETRIES=10  
+            BASE_SLEEP_INTERVAL=5
             cd /root/
             attempt=0
             sleep_interval=$BASE_SLEEP_INTERVAL
@@ -204,7 +204,7 @@ Resources:
                 echo "失败的尝试 #$((attempt+1))，将在 $sleep_interval 秒后重试..."
                 attempt=$((attempt+1))
                 sleep $sleep_interval
-                sleep_interval=$((sleep_interval * 2)) 
+                sleep_interval=$((sleep_interval + 5)) 
               fi
             done
             echo "多次尝试后仍然无法克隆仓库，请检查网络连接或仓库地址是否正确。"
