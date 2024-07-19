@@ -3,7 +3,7 @@ Service:
   DeployType: ros
   DeployMetadata:
     ServiceInstanceNameRule:
-      Prefix: prometheus
+      Prefix: zabbix-
     TemplateConfigs:
       - Name: 单机版
         Url: 'ros_templates/template.yaml'
@@ -40,5 +40,5 @@ Service:
   ServiceType: private
   ServiceInfo:
     Locale: zh-CN
-    ShortDescription: prometheus deploy
-    Image: 'resources/icons/service_logo.png'
+    ShortDescription: Zabbix是一款开源的企业级监控解决方案，用于监控多种IT基础设施组件，包括网络设备、服务器、虚拟机和云服务。其主要功能涵盖性能监控、资源使用情况监控以及故障检测和通知。
+    Image: 'resources/icons/zabbix.jpg'
