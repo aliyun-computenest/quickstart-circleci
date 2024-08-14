@@ -39,6 +39,11 @@ Service:
           - eu-central-1
   ServiceType: private
   ServiceInfo:
-    Locale: zh-CN
-    ShortDescription: Zabbix是一款开源的企业级监控解决方案，用于监控多种IT基础设施组件，包括网络设备、服务器、虚拟机和云服务。其主要功能涵盖性能监控、资源使用情况监控以及故障检测和通知。
-    Image: 'resources/icons/zabbix.jpg'
+    - Name: Zabbix 社区版
+      Locale: zh-CN
+      ShortDescription: Zabbix是一款开源的企业级监控解决方案，用于监控多种IT基础设施组件，包括网络设备、服务器、虚拟机和云服务。其主要功能涵盖性能监控、资源使用情况监控以及故障检测和通知。
+      Image: 'resources/icons/zabbix.jpg'
+    - Name: Zabbix Community Edition
+      Locale: en-US
+      ShortDescription: Zabbix is an open source enterprise-level monitoring solution for monitoring a variety of IT infrastructure components, including network devices, servers, virtual machines, and cloud services. Its main functions include performance monitoring, resource usage monitoring, and fault detection and notification.
+      Image: 'resources/icons/zabbix.jpg'
