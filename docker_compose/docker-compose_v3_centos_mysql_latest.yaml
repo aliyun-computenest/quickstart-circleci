@@ -10,6 +10,8 @@ services:
    - mysql-server
   labels:
    com.zabbix.os: "${CENTOS_OS_TAG}"
+  environment:
+    - ZBX_CACHESIZE=256M
 
  zabbix-proxy-sqlite3:
   extends:
