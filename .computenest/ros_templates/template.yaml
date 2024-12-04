@@ -160,8 +160,7 @@ Resources:
       Timeout: 3600
       CommandContent: |-
         #!/bin/bash
-        cd /root/quickstart-zabbix/docker_compose
-        docker compose -f ./docker-compose_v3_centos_mysql_latest.yaml up -d
+        systemctl start zabbix.service
 Outputs:
   ServerAddress:
     Description:

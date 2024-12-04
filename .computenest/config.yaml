@@ -94,10 +94,12 @@ ImageBuilder:
     Timeout: 10800
     Tags: [ ]
     CommandContent: |-
-      #!/bin/bash
-      sudo mkdir -p /etc/docker
-      sudo tee /etc/docker/daemon.json <<-'EOF'
-      {
+        #!/bin/bash
+        sudo yum -y update
+        sudo yum -y install yum-utils
+        sudo mkdir -p /etc/docker
+        sudo tee /etc/docker/daemon.json <<-'EOF'
+        {
           "registry-mirrors": [
               "https://0vmzj3q6.mirror.aliyuncs.com",
               "https://docker.m.daocloud.io",
@@ -109,57 +111,38 @@ ImageBuilder:
               "https://noohub.ru",
               "https://vlgh0kqj.mirror.aliyuncs.com"
           ]
-      }
-      EOF
-      sudo systemctl daemon-reload
-      
-      yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-      yum makecache fast
-      yum install -y git docker-ce jq
-      systemctl enable docker
-      systemctl start docker
-      
-      REPO_URL="https://github.com/aliyun-computenest/quickstart-zabbix"
-      CLONE_DIR="/root/quickstart-zabbix"
-      MAX_RETRIES=10  
-      BASE_SLEEP_INTERVAL=5
-      cd /root/
-      attempt=0
-      sleep_interval=$BASE_SLEEP_INTERVAL
-      while [ $attempt -lt $MAX_RETRIES ]; do
-        if git clone "$REPO_URL" "$CLONE_DIR"; then
-          echo "仓库克隆成功！"
-          cd ./quickstart-zabbix/docker_compose
-          docker compose -f ./docker-compose_v3_centos_mysql_latest.yaml up -d
-          ARGUS_VERSION=3.5.7 /bin/bash -c "$(curl -sS https://cms-agent-${RegionId}.oss-${RegionId}-internal.aliyuncs.com/Argus/agent_install_ecs-1.7.sh)" >> /root/install_cms_agent.log 2>&1
-          exit 0
-        else
-          echo "失败的尝试 #$((attempt+1))，将在 $sleep_interval 秒后重试..."
-          attempt=$((attempt+1))
-          sleep $sleep_interval
-          sleep_interval=$((sleep_interval + 5)) 
-        fi
-      done
-      echo "多次尝试后仍然无法克隆仓库，请检查网络连接或仓库地址是否正确。"
-      exit 1
-      
-      cat > /etc/systemd/system/zabbix.service <<EOF
-      [Unit]
-      Description=Pterodactyl Panel Service
-      Requires=docker.service
-      After=docker.service
+        }
+        EOF
+        sudo systemctl daemon-reload
 
-      [Service]
-      Type=oneshot
-      RemainAfterExit=yes
-      WorkingDirectory=/root
-      ExecStart=/usr/bin/docker compose up -d -f /root/docker-compose_v3_centos_mysql_latest.yaml
-      ExecStop=/usr/bin/docker compose down
-      TimeoutStartSec=0
+        yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+        yum makecache fast
+        yum install -y git docker-ce jq
+        systemctl enable docker
+        systemctl start docker
 
-      [Install]
-      WantedBy=multi-user.target
-      EOF
+        REPO_URL="https://github.com/aliyun-computenest/quickstart-zabbix"
+        CLONE_DIR="/root/quickstart-zabbix"
+        git clone "$REPO_URL" "$CLONE_DIR"
+        ARGUS_VERSION=3.5.7 /bin/bash -c "$(curl -sS https://cms-agent-ap-southeast-1.oss-ap-southeast-1-internal.aliyuncs.com/Argus/agent_install_ecs-1.7.sh)" >> /root/install_cms_agent.log 2>&1
+        cat > /etc/systemd/system/zabbix.service <<EOF
+        [Unit]
+        Description=Zabbix Service
+        Requires=docker.service
+        After=docker.service
 
-      systemctl enable zabbix
-      systemctl start zabbix
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        WorkingDirectory=/root
+        ExecStart=/usr/bin/docker compose -f /root/quickstart-zabbix/docker_compose/docker-compose_v3_centos_mysql_latest.yaml up -d
+        ExecStop=/usr/bin/docker compose down
+        TimeoutStartSec=0
+
+        [Install]
+        WantedBy=multi-user.target
+        EOF
+
+        systemctl enable zabbix.service
+        systemctl start zabbix.service
+        systemctl status zabbix.service
