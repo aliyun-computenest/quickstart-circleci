@@ -49,8 +49,8 @@ Service:
 Artifact:
   EcsImage:
     ArtifactType: EcsImage
-    ArtifactName: cloudreve
-    Description: cloudreve
+    ArtifactName: zabbix
+    Description: zabbix
     ArtifactProperty:
       RegionId: ${ImageBuilder.EcsImage.RegionId}
       ImageId: ${ImageBuilder.EcsImage.SourceImageId}
