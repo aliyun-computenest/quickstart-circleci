@@ -4,48 +4,19 @@ Service:
   DeployMetadata:
     ServiceInstanceNameRule:
       Prefix: zabbix-
+    SupplierDeployMetadata:
+      ArtifactRelation:
+        'centos_7_9_x64_20G_alibase_20240403.vhd':
+          ArtifactId: ${Artifact.EcsImage.ArtifactId}
+          ArtifactVersion: ${Artifact.EcsImage.ArtifactVersion}
     TemplateConfigs:
       - Name: 单机版
         Url: 'ros_templates/template.yaml'
-        AllowedRegions:
-          - cn-qingdao
-          - cn-beijing
-          - cn-zhangjiakou
-          - cn-huhehaote
-          - cn-wulanchabu
-          - cn-hangzhou
-          - cn-shanghai
-          - cn-shenzhen
-          - cn-chengdu
-          - cn-heyuan
-          - cn-guangzhou
-          - cn-hongkong
-          - ap-northeast-1
-          - ap-southeast-1
-          - ap-southeast-3
-          - ap-southeast-5
-          - ap-southeast-6
-          - us-east-1
-          - us-west-1
-          - eu-west-1
-          - eu-central-1
-          - me-east-1
-          - me-central-1
-          - cn-nanjing
-          - cn-fuzhou
-          - ap-southeast-7
-          - ap-northeast-2
-          - cn-wuhan-lr
   ServiceType: private
   ServiceInfo:
-    - Name: Zabbix 社区版
-      Locale: zh-CN
-      ShortDescription: Zabbix是一款开源的企业级监控解决方案，用于监控多种IT基础设施组件，包括网络设备、服务器、虚拟机和云服务。其主要功能涵盖性能监控、资源使用情况监控以及故障检测和通知。
-      Image: 'resources/icons/zabbix.jpg'
-    - Name: Zabbix Community Edition
-      Locale: en-US
-      ShortDescription: Zabbix is an open source enterprise-level monitoring solution for monitoring a variety of IT infrastructure components, including network devices, servers, virtual machines, and cloud services. Its main functions include performance monitoring, resource usage monitoring, and fault detection and notification.
-      Image: 'resources/icons/zabbix.jpg'
+    Locale: zh-CN
+    ShortDescription: Zabbix是一款开源的企业级监控解决方案，用于监控多种IT基础设施组件，包括网络设备、服务器、虚拟机和云服务。其主要功能涵盖性能监控、资源使用情况监控以及故障检测和通知。
+    Image: 'resources/icons/zabbix.jpg'
 Artifact:
   EcsImage:
     ArtifactType: EcsImage
@@ -54,35 +25,6 @@ Artifact:
     ArtifactProperty:
       RegionId: ${ImageBuilder.EcsImage.RegionId}
       ImageId: ${ImageBuilder.EcsImage.SourceImageId}
-    SupportRegionIds:
-      - cn-qingdao
-      - cn-beijing
-      - cn-zhangjiakou
-      - cn-huhehaote
-      - cn-wulanchabu
-      - cn-hangzhou
-      - cn-shanghai
-      - cn-shenzhen
-      - cn-chengdu
-      - cn-heyuan
-      - cn-guangzhou
-      - cn-hongkong
-      - ap-northeast-1
-      - ap-southeast-1
-      - ap-southeast-3
-      - ap-southeast-5
-      - ap-southeast-6
-      - us-east-1
-      - us-west-1
-      - eu-west-1
-      - eu-central-1
-      - me-east-1
-      - me-central-1
-      - cn-nanjing
-      - cn-fuzhou
-      - ap-southeast-7
-      - ap-northeast-2
-      - cn-wuhan-lr
 ImageBuilder:
   EcsImage:
     RegionId: ap-southeast-1
